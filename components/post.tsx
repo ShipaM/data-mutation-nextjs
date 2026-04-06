@@ -1,7 +1,15 @@
 import { formatDate } from "@/lib/format";
 import Image from "next/image";
+import type { ImageLoaderProps } from "next/image";
 import LikeButton from "./like-icon";
 import { TPost } from "@/types";
+
+const imageLoader = ({ src, quality }: ImageLoaderProps): string => {
+  const urlStart = src.split("upload/")[0];
+  const urlEnd = src.split("upload/")[1];
+  const transformation = `w_200,q_${quality}`;
+  return `${urlStart}upload/${transformation}/${urlEnd}`;
+};
 
 export const Post = ({
   post,
@@ -12,8 +20,15 @@ export const Post = ({
 }) => {
   return (
     <article className="post">
-      <div className="post-image">
-        <Image src={post.image} alt={post.title} width={500} height={300} />
+      <div className="relative w-32 h-24">
+        <Image
+          src={post.image}
+          alt={post.title}
+          width={200}
+          height={120}
+          loader={imageLoader}
+          quality={50}
+        />
       </div>
       <div className="post-content">
         <header>
